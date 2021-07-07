@@ -4,6 +4,7 @@ import './style.scss'
 type RoomCodeProps = {
   code: string
 }
+
 export function RoomCode(props: RoomCodeProps){
   
   function copyRoomCodeToClipboard(){
@@ -16,7 +17,7 @@ export function RoomCode(props: RoomCodeProps){
       <div>
         <img src={copyIMG} alt="" />
       </div>
-      <span>sala {props.code}</span>
+      <span>sala #{props.code}</span>
     </button>
   )
 }
