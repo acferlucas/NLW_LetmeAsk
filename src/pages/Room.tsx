@@ -5,31 +5,9 @@ import { Button } from '../components/button'
 import { Question } from '../components/Question/Question'
 import { RoomCode } from '../components/RoomCode/RoomCode'
 import { useAuth } from '../hooks/useAuth'
+import { useRoom } from '../hooks/useRoom'
 import { database } from '../services/firebase'
 import '../styles/room.scss'
-
-type FirebaseQuestions = Record<string, {
-  
-  auth: {
-    name : string
-    avatar: string
-  },
-  content : string
-  isAnswered: boolean
-  isHighlighted: boolean
-}>
-
-type Questions = {
-  id: string
-  author: {
-    name : string
-    avatar: string
-  },
-  content : string
-  isAnswered: boolean
-  isHighlighted: boolean
-}
-
 
 type RoomParams = {
   id: string
@@ -38,36 +16,10 @@ type RoomParams = {
 export function Room(){
 
   const params = useParams<RoomParams>()
+  const roomId = params.id
   const {user} = useAuth()
+  const { title, questions} = useRoom(roomId)
   const [newquestion,setNewquestion] = useState('')
-  const [questions,setQuestions] = useState<Questions[]>([])
-  const [title,setTitle] = useState('')
-
-  console.log(questions)
-
-  useEffect(() => {
-    const roomRef = database.ref(`rooms/${params.id}`)
-
-    roomRef.on('value',room => {
-      
-      const databaseRoom = room.val()
-      const firebaseQuestion:FirebaseQuestions = databaseRoom.questions ?? {}
-
-      const parsedQuestion = Object.entries(firebaseQuestion).map(([key,value]) =>{
-        return {
-          id:key,
-          content: value.content,
-          author: value.auth,
-          isHighlighted: value.isHighlighted,
-          isAnswered: value.isAnswered,
-
-        }
-      })
-      setTitle(databaseRoom.title)
-      setQuestions(parsedQuestion)
-    })
-
-  },[params.id])
 
   async function handleSendQuestion(event : FormEvent){
     event.preventDefault()
@@ -98,7 +50,7 @@ export function Room(){
       <header>
         <div className="content">
           <img src={logoIMG} alt="LetmeAsk" />
-          <RoomCode code = {params.id} />
+          <RoomCode code = {roomId} />
         </div>
       </header>
       <main className="content">
