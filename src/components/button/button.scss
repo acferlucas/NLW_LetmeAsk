@@ -16,6 +16,12 @@
     svg {
       margin-right: 8px;
     }
+
+    &.outlined {
+      border: 1px solid #835afd;
+      background: #fff;
+      color: #835afd;
+    }
     
     &:not(:disabled):hover{
       
