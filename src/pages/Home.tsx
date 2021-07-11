@@ -32,9 +32,14 @@ async function handleJoinRoom(event:FormEvent){
   
   if(!roomRef.exists()){
     alert('room not found')
-  }else {
-    history.push(`/rooms/${roomcode}`)
+    return
   }
+  if(roomRef.val().endedAt){
+    alert('room already ended.')
+    return
+  }
+    history.push(`/rooms/${roomcode}`)
+  
   
 }
 

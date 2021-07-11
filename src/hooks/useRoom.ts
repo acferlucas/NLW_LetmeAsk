@@ -27,7 +27,7 @@ type Questions = {
   isAnswered: boolean
   isHighlighted: boolean
   likeCount: number
-  hasliked : boolean
+  likeId : string | undefined
 }
 
 
@@ -53,7 +53,7 @@ export function useRoom(roomId: string){
           isHighlighted: value.isHighlighted,
           isAnswered: value.isAnswered,
           likeCount: Object.values(value.likes ?? {}).length,
-          hasliked: Object.values(value.likes ?? {}).some(likes => likes.authorId === user?.id)
+          likeId: Object.entries(value.likes ?? {}).find(([key,like]) => like.authorId === user?.id)?.[0],
 
         }
       })
