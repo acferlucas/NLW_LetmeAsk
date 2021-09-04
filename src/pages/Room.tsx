@@ -17,7 +17,7 @@ export function Room(){
 
   const params = useParams<RoomParams>()
   const roomId = params.id
-  const {user} = useAuth()
+  const {user, signInWithGoogle} = useAuth()
   const { title, questions} = useRoom(roomId)
   const [newquestion,setNewquestion] = useState('')
 
@@ -47,14 +47,22 @@ export function Room(){
   
   async function handleLikeQuestion(questionId:string, likeId: string | undefined) {
 
-    if(likeId){
+    if(!user){
+      handleLogin()
       
+    }else if(likeId)
       await database.ref(`rooms/${roomId}/questions/${questionId}/likes/${likeId}`).remove()
-    } else {
+     else {
       const newlike = await database.ref(`rooms/${roomId}/questions/${questionId}/likes`).push({
         authorId: user?.id,
       })
     }
+  }
+  async function handleLogin(){
+    console.log('estou na func')
+    if(!user) {
+      await signInWithGoogle()
+    } 
   }
 
   return (
@@ -80,7 +88,7 @@ export function Room(){
                 <span>{user.name}</span>  
 
               </div>
-            ) : (<span>Para enviar uma pergunta, <button>faça seu Login</button></span>)}
+            ) : (<span>Para enviar uma pergunta, <button onClick={handleLogin}>faça seu Login</button></span>)}
             <Button type="submit" disabled={!user}>Enviar pergunta</Button>
           </div>
         </form>

@@ -15,13 +15,13 @@ type QuestionsProps = {
 }
 
 export function Question({ content, author , isAnswered = false, isHighlighted = false, children}:QuestionsProps){
-  console.log(children)
+  console.log(author.avatar)
   return (
     <div className={`question ${isAnswered ? 'answered' : ''} ${isHighlighted ? 'highlighted' : ''}`}>
       <p>{content}</p>
       <footer>
         <div className="user-info">
-          <img src={author.avatar} alt="" />
+          <img src={author.avatar} alt="Avantar author" />
         </div>
         <div>
           {children}
